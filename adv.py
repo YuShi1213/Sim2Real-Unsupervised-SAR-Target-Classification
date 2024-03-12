@@ -51,9 +51,8 @@ class AdversarialLoss(nn.Module):
         loss_fn = nn.BCELoss()
         weight = domain_pred*torch.log2(domain_pred)+(1-domain_pred)*torch.log2(1-domain_pred)
         
-        
         loss_adv = loss_fn(domain_pred, domain_label.float().to(device))
-        return loss_adv, weight
+        return loss_adv
     
 
 class ReverseLayerF(Function):
@@ -64,6 +63,7 @@ class ReverseLayerF(Function):
     
     @staticmethod
     def backward(ctx, grad_output):
+        #output = grad_output.neg() * ctx.alpha*(1+weight)
         output = grad_output.neg() * ctx.alpha
         return output, None
 
