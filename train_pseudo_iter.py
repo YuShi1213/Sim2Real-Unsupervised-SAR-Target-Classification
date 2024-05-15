@@ -128,12 +128,12 @@ def train(model):
             #loss_all = tgt_loss + src_loss 
         else:
             try:
-                tgt_pseudo_data, tgt_pseudo_label = tgt_pseudo_iter.next()
+                tgt_pseudo_data, _ = tgt_pseudo_iter.next()
             except Exception as err:
                 tgt_pseudo_iter = iter(tgt_pseudo_loader)
-                tgt_pseudo_data, tgt_pseudo_label = tgt_pseudo_iter.next()
+                tgt_pseudo_data, _ = tgt_pseudo_iter.next()
             if cuda:
-                tgt_pseudo_data, tgt_pseudo_label = tgt_pseudo_data.cuda(), tgt_pseudo_label.cuda()
+                tgt_pseudo_data = tgt_pseudo_data.cuda()
             #_, proxcy = criterion_tgt(tgt_pred, tgt_label.cuda())
             pseudo_CEloss,mask,tgt_pseudo_pred,pseudo_labels,tgt_pseudo_feat = pseudo(model,tgt_pseudo_data)
             pseudo_loss, tgt_proxcy = criterion_tgt(tgt_pseudo_pred, pseudo_labels.cuda(),mask)
